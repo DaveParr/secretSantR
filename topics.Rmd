@@ -1,0 +1,15 @@
+Suggestions for high level topics for short talks:
+* Data Visualisation
+* Shiny
+* Data Wrangling
+* Reports
+* Infrastructure
+* Machine Learning
+* Collaboration
+* Things I could do better
+* My favourite use case
+* R in my profession
+* How I learned R
+* Something I learned this year
+* My favourite data set
+* A user did what
