@@ -13,3 +13,4 @@ Suggestions for high level topics for short talks:
 * Something I learned this year
 * My favourite data set
 * A user did what
+* Data Munging. An etymology
