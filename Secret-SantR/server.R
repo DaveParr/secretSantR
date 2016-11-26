@@ -20,7 +20,7 @@ saveData <- function(data) {
   # Grab the Google Sheet
   sheet <- gs_key(table)
   # Add the data as a new row
-  gs_add_row(sheet, input = data)
+  gs_edit_cells(sheet, input = data, anchor = paste0("A", sample(1:14,1)))
 }
 
 loadData <- function() {
