@@ -44,9 +44,9 @@ shinyServer(function(input, output, session) {
     saveData(formData())
   })
   
-  # Show the previous responses
+  # Show the previous topics
   # (update with current response when Submit is clicked)
-  output$responses <- DT::renderDataTable({
+  output$topics <- DT::renderDataTable({
     input$submit
     loadData()
   })     
