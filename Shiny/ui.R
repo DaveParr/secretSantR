@@ -11,7 +11,7 @@ library(shiny)
 
 # Define UI for application that draws a histogram
 shinyUI(fluidPage(
-  DT::dataTableOutput("topics", width = 300), tags$hr(),
   textInput("name", "Name", ""),
-  actionButton("submit", "Submit")
+  actionButton("submit", "Submit"),
+  DT::dataTableOutput("topics", width = 300), tags$hr()
 ))
