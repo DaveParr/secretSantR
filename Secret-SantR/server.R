@@ -10,10 +10,11 @@
 library(shiny)
 library(googlesheets)
 
-# Define the fields we want to save from the form
-fields <- c("name", "used_shiny", "r_num_years")
-
+# Source google sheet
 table <- "133bR8TbETkIQOJTe-2hcRBno5lf3EoaS6khhIlhkWoc"
+
+# Define the fields we want to save from the form
+fields <- c("name")
 
 saveData <- function(data) {
   # Grab the Google Sheet
@@ -28,9 +29,6 @@ loadData <- function() {
   # Read the data
   gs_read_csv(sheet)
 }
-
-# Define the fields we want to save from the form
-fields <- c("name", "used_shiny", "r_num_years")
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output, session) {
