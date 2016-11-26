@@ -13,18 +13,18 @@ library(googlesheets)
 # Define the fields we want to save from the form
 fields <- c("name", "used_shiny", "r_num_years")
 
-table <- "responses"
+table <- "133bR8TbETkIQOJTe-2hcRBno5lf3EoaS6khhIlhkWoc"
 
 saveData <- function(data) {
   # Grab the Google Sheet
-  sheet <- gs_title(table)
+  sheet <- gs_key(table)
   # Add the data as a new row
   gs_add_row(sheet, input = data)
 }
 
 loadData <- function() {
   # Grab the Google Sheet
-  sheet <- gs_title(table)
+  sheet <- gs_key(table)
   # Read the data
   gs_read_csv(sheet)
 }
