@@ -14,12 +14,11 @@ library(tidyverse)
 # Source google sheet
 table <- "133bR8TbETkIQOJTe-2hcRBno5lf3EoaS6khhIlhkWoc"
 
-# Define the fields we want to save from the form
-fields <- c("name")
+
+# Grab the Google Sheet
+sheet <- gs_key(table)
 
 saveName <- function(data) {
-  # Grab the Google Sheet
-  sheet <- gs_key(table)
   # Count how many topics are left unassigned
   freetopics <- gs_read_csv(sheet) %>% filter(is.na(name)) %>% count() %>% as.numeric()
   # Add the data in a random cell
@@ -27,18 +26,17 @@ saveName <- function(data) {
 }
 
 loadFreeTopics <- function() {
-  # Grab the Google Sheet
-  sheet <- gs_key(table)
   # Read the data and filter where there is a name
   gs_read_csv(sheet) %>% filter(is.na(name))
 }
 
 loadAssignedTopics <- function() {
-  # Grab the Google Sheet
-  sheet <- gs_key(table)
   # Read the data and filter where there is no name
   gs_read_csv(sheet) %>% filter(!is.na(name))
 }
+
+# Define the fields we want to save from the form
+fields <- c("name")
 
 shinyServer(function(input, output, session) {
   
