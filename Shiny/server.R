@@ -22,25 +22,24 @@ saveName <- function(data) {
   sheet <- gs_key(table)
   # Count how many topics are left unassigned
   freetopics <- gs_read_csv(sheet) %>% filter(is.na(name)) %>% count() %>% as.numeric()
-  # Add the data as a new row
+  # Add the data in a random cell
   gs_edit_cells(sheet, input = data, anchor = paste0("A", base::sample(2:freetopics,1)))
 }
 
 loadFreeTopics <- function() {
   # Grab the Google Sheet
   sheet <- gs_key(table)
-  # Read the data
+  # Read the data and filter where there is a name
   gs_read_csv(sheet) %>% filter(is.na(name))
 }
 
 loadAssignedTopics <- function() {
   # Grab the Google Sheet
   sheet <- gs_key(table)
-  # Read the data
+  # Read the data and filter where there is no name
   gs_read_csv(sheet) %>% filter(!is.na(name))
 }
 
-# Define server logic required to draw a histogram
 shinyServer(function(input, output, session) {
   
   # Whenever a field is filled, aggregate all form data
