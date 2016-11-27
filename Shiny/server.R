@@ -9,6 +9,7 @@
 
 library(shiny)
 library(googlesheets)
+library(tidyverse)
 
 # Source google sheet
 table <- "133bR8TbETkIQOJTe-2hcRBno5lf3EoaS6khhIlhkWoc"
