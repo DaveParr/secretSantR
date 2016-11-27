@@ -17,18 +17,27 @@ table <- "133bR8TbETkIQOJTe-2hcRBno5lf3EoaS6khhIlhkWoc"
 # Define the fields we want to save from the form
 fields <- c("name")
 
-saveData <- function(data) {
+saveName <- function(data) {
   # Grab the Google Sheet
   sheet <- gs_key(table)
+  # Count how many topics are left unassigned
+  freetopics <- gs_read_csv(sheet) %>% filter(is.na(name)) %>% count() %>% as.numeric()
   # Add the data as a new row
-  gs_edit_cells(sheet, input = data, anchor = paste0("A", sample(1:14,1)))
+  gs_edit_cells(sheet, input = data, anchor = paste0("A", base::sample(2:freetopics,1)))
 }
 
-loadData <- function() {
+loadFreeTopics <- function() {
   # Grab the Google Sheet
   sheet <- gs_key(table)
   # Read the data
-  gs_read_csv(sheet)
+  gs_read_csv(sheet) %>% filter(is.na(name))
+}
+
+loadAssignedTopics <- function() {
+  # Grab the Google Sheet
+  sheet <- gs_key(table)
+  # Read the data
+  gs_read_csv(sheet) %>% filter(!is.na(name))
 }
 
 # Define server logic required to draw a histogram
@@ -42,13 +51,20 @@ shinyServer(function(input, output, session) {
   
   # When the Submit button is clicked, save the form data
   observeEvent(input$submit, {
-    saveData(formData())
+    saveName(formData())
   })
   
-  # Show the previous topics
+  # Show the available topics
   # (update with current response when Submit is clicked)
-  output$topics <- DT::renderDataTable({
+  output$freeTopics <- DT::renderDataTable({
     input$submit
-    loadData()
+    loadFreeTopics()
+  })
+  
+  # Show the unavailble topics
+  # (update with current response when Submit is clicked)
+  output$assignedTopics <- DT::renderDataTable({
+    input$submit
+    loadAssignedTopics()
   })     
 })
