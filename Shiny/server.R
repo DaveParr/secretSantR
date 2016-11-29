@@ -17,8 +17,8 @@ shinyServer(function(input, output, session) {
   # Update action
   submitaction<-function(){
   workingtopicslist<-topicslist
-  rowI <- workingtopicslist[, .I[Topic %in% topic]]
-  gs_edit_cells(gs_key(sheet), input = name(), anchor = paste0("B",rowI))
+  rowI <- workingtopicslist[, .I[Topic == topic]]
+  gs_edit_cells(gs_key(sheet), input = name(), anchor = paste0("B",rowI+1))
   }
   
   # When submit is picked
@@ -47,7 +47,7 @@ shinyServer(function(input, output, session) {
     
     # Within allowed mulligans
     if(v$mulligan<=allowedMulligans){
-      topic<-topicslist[Topic!=topic&(is.na(Name)|Name==""),Topic[sample(.I,1)]]
+      topic<<-topicslist[Topic!=topic&(is.na(Name)|Name==""),Topic[sample(.I,1)]]
       output$topic<-renderText(topic)
     }
     
