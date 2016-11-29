@@ -1,67 +1,72 @@
-#
-# This is the server logic of a Shiny web application. You can run the 
-# application by clicking 'Run App' above.
-#
-# Find out more about building applications with Shiny here:
-# 
-#    http://shiny.rstudio.com/
-#
-
 library(shiny)
-library(googlesheets)
-library(tidyverse)
+library(shinyjs)
+library(data.table)
 
-# Source google sheet
-table <- "133bR8TbETkIQOJTe-2hcRBno5lf3EoaS6khhIlhkWoc"
-
-
-# Grab the Google Sheet
-sheet <- gs_key(table)
-
-saveName <- function(data) {
-  # Count how many topics are left unassigned
-  freetopics <- gs_read_csv(sheet) %>% filter(is.na(name)) %>% count() %>% as.numeric()
-  # Add the data in a random cell
-  gs_edit_cells(sheet, input = data, anchor = paste0("A", base::sample(2:freetopics,1)))
-}
-
-loadFreeTopics <- function() {
-  # Read the data and filter where there is a name
-  gs_read_csv(sheet) %>% filter(is.na(name))
-}
-
-loadAssignedTopics <- function() {
-  # Read the data and filter where there is no name
-  gs_read_csv(sheet) %>% filter(!is.na(name))
-}
-
-# Define the fields we want to save from the form
-fields <- c("name")
+allowedMulligans<-1
+topicslist<-fread("results.csv")
+topic<-topicslist[is.na(Name)|Name=="",Topic[sample(.I,1)]]
 
 shinyServer(function(input, output, session) {
+  # Initial setup
+  output$topic<-renderText(topic)
+  name<-reactive(input$name)
+  nameavail<-reactive({(!is.null(name())&name()!="")})
   
-  # Whenever a field is filled, aggregate all form data
-  formData <- reactive({
-    data <- sapply(fields, function(x) input[[x]])
-    data
+  # Update action
+  submitaction<-function(){
+  workingtopicslist<-topicslist
+  workingtopicslist[Topic==topic,Name:=name()]
+  fwrite(workingtopicslist,"results.csv")
+  }
+  
+  # When submit is picked
+  observeEvent(input$submit,{
+    if(nameavail()){
+      disable("submit")
+      disable("mulligan")
+      submitaction()
+      showModal(modalDialog(
+        title = "Saved!",
+        "Thanks, we have you down for this topic now"
+      ))
+    } else {
+      showModal(modalDialog(
+        title = "No name!",
+        "Please tell us your name"
+      ))
+    }
+    
   })
   
-  # When the Submit button is clicked, save the form data
-  observeEvent(input$submit, {
-    saveName(formData())
+  # When mulligan is picked
+  v <- reactiveValues(mulligan = 0)
+  observeEvent(input$mulligan,{
+    v$mulligan<-v$mulligan+1
+    
+    # Within allowed mulligans
+    if(v$mulligan<=allowedMulligans){
+      topic<-topicslist[Topic!=topic&(is.na(Name)|Name==""),Topic[sample(.I,1)]]
+      output$topic<-renderText(topic)
+    }
+    
+    # mulligans exceeded
+    if(v$mulligan>allowedMulligans){
+      if(nameavail()){
+        disable("submit")
+        disable("mulligan")
+        submitaction()
+        showModal(modalDialog(
+          title = "Sorry, no more mulligans.",
+          "We've saved this topic for you"
+        ))
+      } else {
+        v$mulligan<-v$mulligan-1
+        showModal(modalDialog(
+          title = "No name!",
+          "Please tell us your name"
+        ))
+      }
+    }
   })
-  
-  # Show the available topics
-  # (update with current response when Submit is clicked)
-  output$freeTopics <- DT::renderDataTable({
-    input$submit
-    loadFreeTopics()
-  })
-  
-  # Show the unavailble topics
-  # (update with current response when Submit is clicked)
-  output$assignedTopics <- DT::renderDataTable({
-    input$submit
-    loadAssignedTopics()
-  })     
+      
 })
