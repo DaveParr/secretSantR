@@ -1,0 +1,11 @@
+name: Shiny
+title: Shiny
+account: davergp
+server: shinyapps.io
+appId: 140824
+bundleId: 628900
+url: https://davergp.shinyapps.io/Shiny/
+when: 1480429831.60003
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: .httr-oauth
