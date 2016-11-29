@@ -1,7 +1,7 @@
 library(shiny)
 
 shinyUI(fluidPage(
-  useShinyjs(),
+  shinyjs::useShinyjs(),
   h1("Get your secret santa topic!"),
   textInput("name", "Name", ""),
   h2(tagList("Talk about:",textOutput("topic"))),
