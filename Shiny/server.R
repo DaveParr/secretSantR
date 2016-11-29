@@ -17,7 +17,7 @@ shinyServer(function(input, output, session) {
   submitaction<-function(){
   workingtopicslist<-topicslist
   workingtopicslist[Topic==topic,Name:=name()]
-  fwrite(workingtopicslist,"results.csv")
+  write.csv(workingtopicslist,"results.csv", row.names = FALSE)
   }
   
   # When submit is picked
