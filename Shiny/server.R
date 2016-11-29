@@ -4,7 +4,8 @@ library(data.table)
 library(googlesheets)
 
 allowedMulligans<-1
-topicslist<-as.data.table(gs_read_csv(gs_key("133bR8TbETkIQOJTe-2hcRBno5lf3EoaS6khhIlhkWoc")))
+sheet <- "133bR8TbETkIQOJTe-2hcRBno5lf3EoaS6khhIlhkWoc"
+topicslist<-as.data.table(gs_read_csv(gs_key(sheet)))
 topic<-topicslist[is.na(Name)|Name=="",Topic[sample(.I,1)]]
 
 shinyServer(function(input, output, session) {
