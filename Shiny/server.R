@@ -17,8 +17,8 @@ shinyServer(function(input, output, session) {
   # Update action
   submitaction<-function(){
   workingtopicslist<-topicslist
-  workingtopicslist[Topic==topic,Name:=name()]
-  write.csv(workingtopicslist,"results.csv", row.names = FALSE)
+  rowI <- workingtopicslist[, .I[Topic %in% topic]]
+  gs_edit_cells(gs_key(sheet), input = name(), anchor = paste0("B",rowI))
   }
   
   # When submit is picked
