@@ -7,5 +7,6 @@ shinyUI(fluidPage(
   h2(tagList("Talk about:",textOutput("topic"))),
   actionButton("mulligan", "Give me another"),
   actionButton("submit", "This one's fine"),
-  DT::dataTableOutput("responses", width = 300), tags$hr()
+  h3("Assigned Topics"),
+  DT::dataTableOutput("responses", width = 300)
 ))
