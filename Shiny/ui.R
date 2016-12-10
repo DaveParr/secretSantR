@@ -7,7 +7,7 @@ shinyUI(fluidPage(theme = shinytheme("paper"),
   textInput("name", "Name", ""),
   h2(tagList("Talk about:",textOutput("topic"))),
   actionButton("mulligan", "Give me another"),
-  actionButton("submit", "This one's fine"),
+  actionButton("submit", "This one's fine", class = "btn-primary"),
   h3("Assigned Topics"),
-  DT::dataTableOutput("responses", width = "50%", style = "bootstrap")
+  DT::dataTableOutput("responses", width = "50%")
 ))
