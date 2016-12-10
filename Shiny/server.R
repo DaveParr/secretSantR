@@ -7,7 +7,6 @@ allowedMulligans <- 1
 sheet <- "133bR8TbETkIQOJTe-2hcRBno5lf3EoaS6khhIlhkWoc"
 topicslist <- as.data.table(gs_read_csv(gs_key(sheet)))
 topic <- topicslist[is.na(Name)|Name=="",Topic[sample(.I,1)]]
-assignedtopics <- topicslist[!is.na(Name)]
 
 shinyServer(function(input, output, session) {
   # Initial setup
@@ -75,7 +74,8 @@ shinyServer(function(input, output, session) {
   # Show the previous responses
   # (update with current response when Submit is clicked)
   output$responses <- DT::renderDataTable({
-    assignedtopics
+    input$submit
+    as.data.table(gs_read_csv(gs_key(sheet)))[!is.na(Name)]
   }) 
       
 })
