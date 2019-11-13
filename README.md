@@ -1,2 +1,3 @@
 # secretSantR
-Shiny app to generate speaker topics
+
+Shiny app to generate speaker topics.
